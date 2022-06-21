@@ -18,36 +18,45 @@ package Projekt
   end Test4;
 
  
-  model TestVolladdierer
-  Modelica.Electrical.Analog.Sources.ConstantVoltage constantVoltage(V = 5)  annotation(
-      Placement(visible = true, transformation(origin = {-64, 56}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
-  Modelica.Electrical.Analog.Basic.Ground ground annotation(
-      Placement(visible = true, transformation(origin = {-62, -86}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
- Projekt.SimpleMath.Addierer addierer(bits=size(a, 1)) annotation(
-      Placement(visible = true, transformation(origin = {22, 16}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  
-    constant Integer a[:] = {1, 0};
-    constant Integer b[:] = {1, 0};
-  equation
-    assert(size(a, 1) == size(b, 1), "a len a == len b");
-  
-    connect(constantVoltage.n, ground.p) annotation(
-      Line(points = {{-64, 46}, {-64, -16}, {-62, -16}, {-62, -76}}, color = {0, 0, 255}));
-  
-    for i in 1:size(a, 1) loop
-      if a[i] == 1 then
-        connect(addierer.a[i], constantVoltage.p);
-      else
-        connect(addierer.a[i], ground.p);
-      end if;
-  
-      if b[i] == 1 then
-        connect(addierer.b[i], constantVoltage.p);
-      else
-        connect(addierer.b[i], ground.p);
-      end if;
-    end for;
-  end TestVolladdierer;
+model TestVolladdierer
+Modelica.Electrical.Analog.Sources.ConstantVoltage constantVoltage(V = 5)  annotation(
+    Placement(visible = true, transformation(origin = {-64, 56}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
+Modelica.Electrical.Analog.Basic.Ground ground annotation(
+    Placement(visible = true, transformation(origin = {-62, -86}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+Projekt.SimpleMath.Addierer addierer(bits=size(a, 1)) annotation(
+    Placement(visible = true, transformation(origin = {22, 16}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+Projekt.SimpleMath.Zweierkomplement zk(bits=size(a, 1)) annotation(
+   Placement(visible = true, transformation(origin = {-6, 62}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+
+  constant Integer a[:] = {0, 1};
+  constant Integer b[:] = {1, 0};
+equation
+  assert(size(a, 1) == size(b, 1), "a len a == len b");
+
+  connect(constantVoltage.n, ground.p) annotation(
+    Line(points = {{-64, 46}, {-64, -16}, {-62, -16}, {-62, -76}}, color = {0, 0, 255}));
+
+  for i in 1:size(a, 1) loop
+    if a[i] == 1 then
+      connect(addierer.a[i], constantVoltage.p);
+    else
+      connect(addierer.a[i], ground.p);
+    end if;
+
+    if b[i] == 1 then
+      connect(zk.a[i], constantVoltage.p);
+    else
+      connect(zk.a[i], ground.p);
+    end if;
+    
+    connect(zk.s[i], addierer.b[i]);
+  end for;
+ connect(constantVoltage.p, zk.vcc) annotation(
+      Line(points = {{-64, 66}, {-12, 66}, {-12, 68}}, color = {0, 0, 255}));
+ connect(zk.ground, constantVoltage.n) annotation(
+      Line(points = {{-14, 54}, {-42, 54}, {-42, 46}, {-64, 46}}, color = {0, 0, 255}));
+
+end TestVolladdierer;
 
   package LogicGates
 
@@ -197,6 +206,22 @@ package Projekt
   connect(y, nand3.y) annotation(
       Line(points = {{80, 8}, {50, 8}, {50, 18}}, color = {0, 0, 255}));
   end OR;
+
+    model NOT
+    Modelica.Electrical.Analog.Interfaces.Pin a annotation(
+        Placement(visible = true, transformation(origin = {-62, 64}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-62, 64}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Electrical.Analog.Interfaces.Pin y annotation(
+        Placement(visible = true, transformation(origin = {62, 10}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {62, 10}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  NAND nand annotation(
+        Placement(visible = true, transformation(origin = {2, 18}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    equation
+      connect(a, nand.a) annotation(
+        Line(points = {{-62, 64}, {-6, 64}, {-6, 26}}, color = {0, 0, 255}));
+      connect(nand.y, y) annotation(
+        Line(points = {{10, 18}, {62, 18}, {62, 10}}, color = {0, 0, 255}));
+  connect(a, nand.b) annotation(
+        Line(points = {{-62, 64}, {-62, 10}, {-6, 10}}, color = {0, 0, 255}));
+    end NOT;
   end LogicGates;
 
   package SimpleMath
@@ -269,18 +294,15 @@ package Projekt
   annotation(
       Icon(graphics = {Text(origin = {70, 63}, extent = {{-14, 7}, {14, -7}}, textString = "s"), Text(origin = {64, -34}, extent = {{-18, 16}, {18, -16}}, textString = "c")}));end Halbaddierer;
 
-    model Addierer
-    parameter Integer bits = 8;
+    model Addierer extends Interfaces.BitInterface;
+    
     Volladdierer volladdierer[bits - 1];
     Halbaddierer halbaddierer annotation(
         Placement(visible = true, transformation(origin = {66, 14}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
     
-    Modelica.Electrical.Analog.Interfaces.Pin a[bits];
     Modelica.Electrical.Analog.Interfaces.Pin b[bits];
-    Modelica.Electrical.Analog.Interfaces.Pin s[bits];
     
     equation
-    
       connect(halbaddierer.a, a[1]);
       connect(halbaddierer.b, b[1]);
       connect(halbaddierer.s, s[1]);
@@ -294,13 +316,49 @@ package Projekt
           connect(volladdierer[i].c_out, volladdierer[i + 1].c_in);
         end if;  
       end for;
-
+    
     end Addierer;
+
+    model Zweierkomplement extends Interfaces.BitInterface;
+    
+    
+    Projekt.SimpleMath.Addierer addierer(bits=bits) annotation(
+        Placement(visible = true, transformation(origin = {64, 8}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      LogicGates.NOT not_[bits];
+      Modelica.Electrical.Analog.Interfaces.Pin vcc annotation(
+        Placement(visible = true, transformation(origin = {-40, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-70, 56}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Modelica.Electrical.Analog.Interfaces.Pin ground annotation(
+        Placement(visible = true, transformation(origin = {24, -54}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-76, -86}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    equation
+    
+      connect(addierer.b[1], vcc);
+      for i in 2:bits loop
+        connect(addierer.b[i], ground);
+      end for;
+    
+      for i in 1:bits loop
+        connect(a[i], not_[i].a);
+        connect(not_[i].y, addierer.a[i]);
+        connect(addierer.s[i], s[i]);
+      end for;
+    annotation(
+        Icon(graphics = {Text(origin = {-69, 82}, extent = {{-21, 10}, {21, -10}}, textString = "Vcc"), Text(origin = {-76, -59}, extent = {{-16, 9}, {16, -9}}, textString = "Ground")}));end Zweierkomplement;
 
 
   end SimpleMath;
 
-  connector BitPin = Boolean;
+  package Interfaces
+    partial model BitInterface
+    
+      parameter Integer bits = 4;
+      
+      Modelica.Electrical.Analog.Interfaces.Pin a[bits];
+      Modelica.Electrical.Analog.Interfaces.Pin s[bits];
+    
+    equation
+
+    end BitInterface;
+  end Interfaces;
   annotation(
     uses(Modelica(version = "4.0.0")));
 end Projekt;
