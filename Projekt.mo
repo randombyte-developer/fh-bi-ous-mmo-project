@@ -23,17 +23,26 @@ package Projekt
       Placement(visible = true, transformation(origin = {-64, 56}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
   Modelica.Electrical.Analog.Basic.Ground ground annotation(
       Placement(visible = true, transformation(origin = {-62, -86}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
- SimpleMath.Volladdierer volladdierer annotation(
-      Placement(visible = true, transformation(origin = {28, 12}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+ Projekt.SimpleMath.Addierer addierer annotation(
+      Placement(visible = true, transformation(origin = {22, 16}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  
+    constant Integer a[:] = {0, 1, 0, 1,0, 1, 0, 1};
+    constant Integer b[:] = {0, 1, 0, 1,0, 1, 0, 1};
   equation
     connect(constantVoltage.n, ground.p) annotation(
       Line(points = {{-64, 46}, {-64, -16}, {-62, -16}, {-62, -76}}, color = {0, 0, 255}));
- connect(constantVoltage.p, volladdierer.a) annotation(
-      Line(points = {{-64, 66}, {20, 66}, {20, 20}}, color = {0, 0, 255}));
- connect(volladdierer.b, constantVoltage.p) annotation(
-      Line(points = {{20, 18}, {-64, 18}, {-64, 66}}, color = {0, 0, 255}));
- connect(constantVoltage.n, volladdierer.c_in) annotation(
-      Line(points = {{-64, 46}, {20, 46}, {20, 4}}, color = {0, 0, 255}));
+  
+    for i in 1:8 loop
+      if a[i] == 1 then
+        connect(addierer.a[i], ground.p);
+      else
+        connect(addierer.a[i], constantVoltage.p);
+      end if;
+  
+      connect(addierer.b[i], constantVoltage.p);
+    end for;
+    
+  
   end TestVolladdierer;
 
   package LogicGates
@@ -256,8 +265,38 @@ package Projekt
   annotation(
       Icon(graphics = {Text(origin = {70, 63}, extent = {{-14, 7}, {14, -7}}, textString = "s"), Text(origin = {64, -34}, extent = {{-18, 16}, {18, -16}}, textString = "c")}));end Halbaddierer;
 
+    model Addierer
+    parameter Integer bits = 8;
+    Volladdierer volladdierer[bits - 1];
+    Halbaddierer halbaddierer annotation(
+        Placement(visible = true, transformation(origin = {66, 14}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    
+    Modelica.Electrical.Analog.Interfaces.Pin a[bits];
+    Modelica.Electrical.Analog.Interfaces.Pin b[bits];
+    Modelica.Electrical.Analog.Interfaces.Pin s[bits];
+    
+    equation
+    
+      connect(halbaddierer.a, a[1]);
+      connect(halbaddierer.b, b[1]);
+      connect(halbaddierer.s, s[1]);
+      connect(halbaddierer.c, volladdierer[1].c_in);
+    
+      for i in 1:(bits-1) loop
+        connect(volladdierer[i].a, a[i + 1]);
+        connect(volladdierer[i].b, b[i + 1]);
+        connect(volladdierer[i].s, s[i + 1]);
+        if i <> (bits-1) then
+          connect(volladdierer[i].c_out, volladdierer[i + 1].c_in);
+        end if;  
+      end for;
+
+    end Addierer;
+
 
   end SimpleMath;
+
+  connector BitPin = Boolean;
   annotation(
     uses(Modelica(version = "4.0.0")));
 end Projekt;
