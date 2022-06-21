@@ -23,26 +23,30 @@ package Projekt
       Placement(visible = true, transformation(origin = {-64, 56}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
   Modelica.Electrical.Analog.Basic.Ground ground annotation(
       Placement(visible = true, transformation(origin = {-62, -86}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
- Projekt.SimpleMath.Addierer addierer annotation(
+ Projekt.SimpleMath.Addierer addierer(bits=size(a, 1)) annotation(
       Placement(visible = true, transformation(origin = {22, 16}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   
-    constant Integer a[:] = {0, 1, 0, 1,0, 1, 0, 1};
-    constant Integer b[:] = {0, 1, 0, 1,0, 1, 0, 1};
+    constant Integer a[:] = {1, 0};
+    constant Integer b[:] = {1, 0};
   equation
+    assert(size(a, 1) == size(b, 1), "a len a == len b");
+  
     connect(constantVoltage.n, ground.p) annotation(
       Line(points = {{-64, 46}, {-64, -16}, {-62, -16}, {-62, -76}}, color = {0, 0, 255}));
   
-    for i in 1:8 loop
+    for i in 1:size(a, 1) loop
       if a[i] == 1 then
-        connect(addierer.a[i], ground.p);
-      else
         connect(addierer.a[i], constantVoltage.p);
+      else
+        connect(addierer.a[i], ground.p);
       end if;
   
-      connect(addierer.b[i], constantVoltage.p);
+      if b[i] == 1 then
+        connect(addierer.b[i], constantVoltage.p);
+      else
+        connect(addierer.b[i], ground.p);
+      end if;
     end for;
-    
-  
   end TestVolladdierer;
 
   package LogicGates
