@@ -299,7 +299,7 @@ end TestVolladdierer;
   annotation(
       Icon(graphics = {Text(origin = {53, 79}, extent = {{-9, 9}, {9, -9}}, textString = "y"), Text(origin = {51, -78}, extent = {{-7, 10}, {7, -10}}, textString = "c"), Text(origin = {-46, 81}, extent = {{-8, 9}, {8, -9}}, textString = "a"), Text(origin = {-49, -80}, extent = {{-9, 8}, {9, -8}}, textString = "b"), Text(origin = {-3, 7}, extent = {{-79, 27}, {79, -27}}, textString = "Halbaddierer"), Rectangle(origin = {-1, 1}, extent = {{-97, 97}, {97, -97}})}));end Halbaddierer;
 
-    model Addierer extends Interfaces.BitInterface;
+    model Addierer extends Interfaces.BitsIoInterface;
     
     Volladdierer volladdierer[bits - 1];
     Halbaddierer halbaddierer;
@@ -323,7 +323,7 @@ end TestVolladdierer;
     
     end Addierer;
 
-    model Zweierkomplement extends Interfaces.BitInterface;
+    model Zweierkomplement extends Interfaces.BitsIoInterface;
     
     
     Projekt.SimpleMath.Addierer addierer(bits=bits) annotation(
@@ -352,7 +352,7 @@ end TestVolladdierer;
   end SimpleMath;
 
   package Interfaces
-    partial model BitInterface
+    partial model BitsIoInterface
     
       parameter Integer bits = 4;
       
@@ -361,7 +361,7 @@ end TestVolladdierer;
     
     equation
 
-    end BitInterface;
+    end BitsIoInterface;
   end Interfaces;
   annotation(
     uses(Modelica(version = "4.0.0")));
