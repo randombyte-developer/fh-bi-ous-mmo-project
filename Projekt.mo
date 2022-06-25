@@ -49,7 +49,7 @@ equation
       connect(zk.a[i], ground.p);
     end if;
     
-    connect(zk.s[i], addierer.b[i]);
+    connect(zk.y[i], addierer.b[i]);
   end for;
  connect(constantVoltage.p, zk.vcc) annotation(
       Line(points = {{-64, 66}, {-12, 66}, {-12, 68}}, color = {0, 0, 255}));
@@ -234,40 +234,40 @@ end TestVolladdierer;
 
   model Volladdierer
   Projekt.SimpleMath.Halbaddierer halbaddierer1 annotation(
-      Placement(visible = true, transformation(origin = {-24, 50}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      Placement(visible = true, transformation(origin = {-26, 50}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Projekt.SimpleMath.Halbaddierer halbaddierer2 annotation(
-      Placement(visible = true, transformation(origin = {6, -34}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      Placement(visible = true, transformation(origin = {0, -32}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.Pin a annotation(
       Placement(visible = true, transformation(origin = {-78, 82}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-78, 82}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.Pin b annotation(
-      Placement(visible = true, transformation(origin = {-78, 52}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-78, 38}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      Placement(visible = true, transformation(origin = {-78, 42}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-78, 38}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.Pin c_in annotation(
       Placement(visible = true, transformation(origin = {-72, -40}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-74, -72}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.Pin c_out annotation(
-      Placement(visible = true, transformation(origin = {66, 56}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {70, 82}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Electrical.Analog.Interfaces.Pin s annotation(
-      Placement(visible = true, transformation(origin = {64, -30}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {72, -72}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      Placement(visible = true, transformation(origin = {64, 8}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {70, -76}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Electrical.Analog.Interfaces.Pin y annotation(
+      Placement(visible = true, transformation(origin = {64, -24}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {70, 82}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Projekt.LogicGates.OR or1 annotation(
       Placement(visible = true, transformation(origin = {34, 8}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   equation
     connect(c_out, or1.y) annotation(
-      Line(points = {{66, 56}, {50, 56}, {50, 8}, {42, 8}}, color = {0, 0, 255}));
+      Line(points = {{64, 8}, {42, 8}}, color = {0, 0, 255}));
   connect(halbaddierer1.c, or1.a) annotation(
-      Line(points = {{-17, 44}, {28, 44}, {28, 16}}, color = {0, 0, 255}));
+        Line(points = {{-18, 42}, {28, 42}, {28, 16}}, color = {0, 0, 255}));
   connect(halbaddierer2.c, or1.b) annotation(
-      Line(points = {{14, -40}, {28, -40}, {28, 0}}, color = {0, 0, 255}));
-  connect(halbaddierer2.s, s) annotation(
-      Line(points = {{14, -30}, {64, -30}}, color = {0, 0, 255}));
-  connect(halbaddierer1.s, halbaddierer2.a) annotation(
-      Line(points = {{-16, 54}, {-2, 54}, {-2, -26}}, color = {0, 0, 255}));
+        Line(points = {{8, -40}, {16, -40}, {16, 0}, {28, 0}}, color = {0, 0, 255}));
+  connect(halbaddierer2.y, y) annotation(
+        Line(points = {{8, -24}, {64, -24}}, color = {0, 0, 255}));
   connect(c_in, halbaddierer2.b) annotation(
-      Line(points = {{-72, -40}, {-37, -40}, {-37, -42}, {-2, -42}}, color = {0, 0, 255}));
+        Line(points = {{-72, -40}, {-7, -40}}, color = {0, 0, 255}));
   connect(b, halbaddierer1.b) annotation(
-      Line(points = {{-78, 52}, {-54, 52}, {-54, 42}, {-32, 42}}, color = {0, 0, 255}));
+        Line(points = {{-78, 42}, {-33, 42}}, color = {0, 0, 255}));
   connect(halbaddierer1.a, a) annotation(
-      Line(points = {{-32, 58}, {-32, 82}, {-78, 82}}, color = {0, 0, 255}));
+        Line(points = {{-33, 58}, {-33, 82}, {-78, 82}}, color = {0, 0, 255}));
+  connect(halbaddierer2.a, halbaddierer1.y) annotation(
+        Line(points = {{-8, -24}, {-8, 58}, {-18, 58}}, color = {0, 0, 255}));
   annotation(
-      Icon(graphics = {Text(origin = {37, 84}, extent = {{-13, 10}, {13, -10}}, textString = "c_out"), Text(origin = {46, -69}, extent = {{-8, 9}, {8, -9}}, textString = "s"), Text(origin = {-47, -73}, extent = {{-13, 9}, {13, -9}}, textString = "c_in"), Text(origin = {-54, 83}, extent = {{-10, 9}, {10, -9}}, textString = "a"), Text(origin = {-53, 36}, extent = {{-9, 8}, {9, -8}}, textString = "b"), Rectangle(origin = {-2, 2}, extent = {{-96, 98}, {96, -98}}), Text(origin = {1, 2}, extent = {{-55, 18}, {55, -18}}, textString = "Volladdierer")}));end Volladdierer;
+      Icon(graphics = {Text(origin = {43, -74}, extent = {{-13, 10}, {13, -10}}, textString = "c_out"), Text(origin = {42, 81}, extent = {{-8, 9}, {8, -9}}, textString = "y"), Text(origin = {-47, -73}, extent = {{-13, 9}, {13, -9}}, textString = "c_in"), Text(origin = {-54, 83}, extent = {{-10, 9}, {10, -9}}, textString = "a"), Text(origin = {-53, 36}, extent = {{-9, 8}, {9, -8}}, textString = "b"), Rectangle(origin = {-2, 2}, extent = {{-96, 98}, {96, -98}}), Text(origin = {1, 2}, extent = {{-55, 18}, {55, -18}}, textString = "Volladdierer")}));end Volladdierer;
 
 
   model Halbaddierer
@@ -275,7 +275,7 @@ end TestVolladdierer;
       Placement(visible = true, transformation(origin = {-76, 82}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-72, 80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.Pin b annotation(
       Placement(visible = true, transformation(origin = {-74, -80}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-74, -80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Electrical.Analog.Interfaces.Pin s annotation(
+  Modelica.Electrical.Analog.Interfaces.Pin y annotation(
       Placement(visible = true, transformation(origin = {74, 38}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {78, 76}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.Pin c annotation(
       Placement(visible = true, transformation(origin = {70, -62}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {80, -78}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -290,14 +290,14 @@ end TestVolladdierer;
       Line(points = {{-8, 38}, {-74, 38}, {-74, -80}}, color = {0, 0, 255}));
   connect(and1.a, a) annotation(
       Line(points = {{-14, -32}, {-14, 72}, {-76, 72}, {-76, 82}}, color = {0, 0, 255}));
-  connect(s, xor.y) annotation(
+  connect(y, xor.y) annotation(
       Line(points = {{74, 38}, {16, 38}, {16, 44}, {8, 44}, {8, 46}}, color = {0, 0, 255}));
   connect(and1.y, c) annotation(
       Line(points = {{2, -39}, {70, -39}, {70, -62}}, color = {0, 0, 255}));
   connect(b, and1.b) annotation(
       Line(points = {{-74, -80}, {-38, -80}, {-38, -48}, {-14, -48}}, color = {0, 0, 255}));
   annotation(
-      Icon(graphics = {Text(origin = {53, 79}, extent = {{-9, 9}, {9, -9}}, textString = "s"), Text(origin = {51, -78}, extent = {{-7, 10}, {7, -10}}, textString = "c"), Text(origin = {-46, 81}, extent = {{-8, 9}, {8, -9}}, textString = "a"), Text(origin = {-49, -80}, extent = {{-9, 8}, {9, -8}}, textString = "b"), Text(origin = {-3, 7}, extent = {{-79, 27}, {79, -27}}, textString = "Halbaddierer"), Rectangle(origin = {-1, 1}, extent = {{-97, 97}, {97, -97}})}));end Halbaddierer;
+      Icon(graphics = {Text(origin = {53, 79}, extent = {{-9, 9}, {9, -9}}, textString = "y"), Text(origin = {51, -78}, extent = {{-7, 10}, {7, -10}}, textString = "c"), Text(origin = {-46, 81}, extent = {{-8, 9}, {8, -9}}, textString = "a"), Text(origin = {-49, -80}, extent = {{-9, 8}, {9, -8}}, textString = "b"), Text(origin = {-3, 7}, extent = {{-79, 27}, {79, -27}}, textString = "Halbaddierer"), Rectangle(origin = {-1, 1}, extent = {{-97, 97}, {97, -97}})}));end Halbaddierer;
 
     model Addierer extends Interfaces.BitInterface;
     
@@ -309,13 +309,13 @@ end TestVolladdierer;
     equation
       connect(halbaddierer.a, a[1]);
       connect(halbaddierer.b, b[1]);
-      connect(halbaddierer.s, s[1]);
+      connect(halbaddierer.y, y[1]);
       connect(halbaddierer.c, volladdierer[1].c_in);
     
       for i in 1:(bits-1) loop
         connect(volladdierer[i].a, a[i + 1]);
         connect(volladdierer[i].b, b[i + 1]);
-        connect(volladdierer[i].s, s[i + 1]);
+        connect(volladdierer[i].y, y[i + 1]);
         if i <> (bits-1) then
           connect(volladdierer[i].c_out, volladdierer[i + 1].c_in);
         end if;  
@@ -343,7 +343,7 @@ end TestVolladdierer;
       for i in 1:bits loop
         connect(a[i], not_[i].a);
         connect(not_[i].y, addierer.a[i]);
-        connect(addierer.s[i], s[i]);
+        connect(addierer.y[i], y[i]);
       end for;
     annotation(
         Icon(graphics = {Text(origin = {-39, 82}, extent = {{-21, 10}, {21, -10}}, textString = "Vcc"), Text(origin = {-30, -77}, extent = {{-16, 9}, {16, -9}}, textString = "Ground")}));end Zweierkomplement;
@@ -357,7 +357,7 @@ end TestVolladdierer;
       parameter Integer bits = 4;
       
       Modelica.Electrical.Analog.Interfaces.Pin a[bits];
-      Modelica.Electrical.Analog.Interfaces.Pin s[bits];
+      Modelica.Electrical.Analog.Interfaces.Pin y[bits];
     
     equation
 
