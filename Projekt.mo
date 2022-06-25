@@ -63,11 +63,11 @@ end TestVolladdierer;
 
  model NAND
   Modelica.Electrical.Analog.Interfaces.Pin a annotation(
-      Placement(visible = true, transformation(origin = {-74, 84}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-74, 84}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      Placement(visible = true, transformation(origin = {-74, 84}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-78, 80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.Pin b annotation(
-      Placement(visible = true, transformation(origin = {-76, -76}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-76, -76}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      Placement(visible = true, transformation(origin = {-76, -76}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-76, -78}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.Pin y annotation(
-      Placement(visible = true, transformation(origin = {80, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {80, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      Placement(visible = true, transformation(origin = {80, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {72, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Semiconductors.NMOS t3 annotation(
       Placement(visible = true, transformation(origin = {4, -28}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Semiconductors.NMOS t4 annotation(
@@ -115,7 +115,8 @@ end TestVolladdierer;
       Line(points = {{14, -28}, {14, -34}}, color = {0, 0, 255}));
   connect(t4.B, t4.S) annotation(
       Line(points = {{10, -66}, {10, -72}}, color = {0, 0, 255}));
-  end NAND;
+  annotation(
+        Icon(graphics = {Rectangle(extent = {{-98, 98}, {98, -98}}), Text(origin = {-33, 1}, extent = {{-35, 27}, {35, -27}}, textString = "NAND"), Text(origin = {-51, 80}, extent = {{-11, 8}, {11, -8}}, textString = "a"), Text(origin = {-55, -76}, extent = {{-11, 8}, {11, -8}}, textString = "b"), Text(origin = {52, 1}, extent = {{-8, 9}, {8, -9}}, textString = "y")}));end NAND;
 
   model XOR
   Projekt.LogicGates.NAND nand1 annotation(
@@ -127,11 +128,11 @@ end TestVolladdierer;
   Projekt.LogicGates.NAND nand4 annotation(
       Placement(visible = true, transformation(origin = {48, 4}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.Pin a annotation(
-      Placement(visible = true, transformation(origin = {-76, 66}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-76, 66}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      Placement(visible = true, transformation(origin = {-76, 66}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-72, 78}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.Pin b annotation(
-      Placement(visible = true, transformation(origin = {-80, -76}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-80, -76}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      Placement(visible = true, transformation(origin = {-80, -76}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-70, -74}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.Pin y annotation(
-      Placement(visible = true, transformation(origin = {86, 2}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {86, 2}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      Placement(visible = true, transformation(origin = {86, 2}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {64, 2}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   equation
     connect(a, nand1.a) annotation(
       Line(points = {{-76, 66}, {-72, 66}, {-72, 4}, {-38, 4}}, color = {0, 0, 255}));
@@ -151,15 +152,16 @@ end TestVolladdierer;
       Line(points = {{40, -4}, {38, -4}, {38, -44}, {12, -44}}, color = {0, 0, 255}));
   connect(y, nand4.y) annotation(
       Line(points = {{86, 2}, {56, 2}, {56, 4}}, color = {0, 0, 255}));
-  end XOR;
+  annotation(
+        Icon(graphics = {Rectangle(extent = {{-98, 98}, {98, -98}}), Text(origin = {-49, 79}, extent = {{-9, 7}, {9, -7}}, textString = "a"), Text(origin = {-46, -73}, extent = {{-10, 7}, {10, -7}}, textString = "b"), Text(origin = {38, 3}, extent = {{-8, 9}, {8, -9}}, textString = "y"), Text(origin = {-39, 4}, extent = {{-41, 18}, {41, -18}}, textString = "XOR")}));end XOR;
 
   model AND
   Modelica.Electrical.Analog.Interfaces.Pin a annotation(
-      Placement(visible = true, transformation(origin = {-84, 78}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-84, 78}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      Placement(visible = true, transformation(origin = {-84, 78}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-68, 78}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.Pin b annotation(
-      Placement(visible = true, transformation(origin = {-80, -74}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-80, -74}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      Placement(visible = true, transformation(origin = {-80, -74}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-70, -78}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.Pin y annotation(
-      Placement(visible = true, transformation(origin = {78, 8}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {78, 8}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      Placement(visible = true, transformation(origin = {78, 8}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {76, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Projekt.LogicGates.NAND nand1 annotation(
       Placement(visible = true, transformation(origin = {-24, 24}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Projekt.LogicGates.NAND nand2 annotation(
@@ -175,15 +177,16 @@ end TestVolladdierer;
       Line(points = {{40, 24}, {62, 24}, {62, 8}, {78, 8}}, color = {0, 0, 255}));
   connect(a, nand1.a) annotation(
       Line(points = {{-84, 78}, {-32, 78}, {-32, 32}}, color = {0, 0, 255}));
-  end AND;
+  annotation(
+        Icon(graphics = {Rectangle(origin = {-1, 1}, extent = {{-97, 97}, {97, -97}}), Text(origin = {-46, 78}, extent = {{-8, 6}, {8, -6}}, textString = "a"), Text(origin = {-47, -77}, extent = {{-9, 7}, {9, -7}}, textString = "b"), Text(origin = {48, 2}, extent = {{-12, 10}, {12, -10}}, textString = "y"), Text(origin = {-28, 0}, extent = {{-40, 20}, {40, -20}}, textString = "AND")}));end AND;
 
   model OR
   Modelica.Electrical.Analog.Interfaces.Pin a annotation(
-      Placement(visible = true, transformation(origin = {-66, 80}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-66, 80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      Placement(visible = true, transformation(origin = {-66, 80}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-72, 80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.Pin b annotation(
-      Placement(visible = true, transformation(origin = {-70, -74}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-70, -74}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      Placement(visible = true, transformation(origin = {-70, -74}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-70, -72}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.Pin y annotation(
-      Placement(visible = true, transformation(origin = {80, 8}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {80, 8}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      Placement(visible = true, transformation(origin = {80, 8}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {76, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Projekt.LogicGates.NAND nand1 annotation(
       Placement(visible = true, transformation(origin = {-20, 48}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Projekt.LogicGates.NAND nand2 annotation(
@@ -205,13 +208,14 @@ end TestVolladdierer;
       Line(points = {{-2, -38}, {34, -38}, {34, 10}}, color = {0, 0, 255}));
   connect(y, nand3.y) annotation(
       Line(points = {{80, 8}, {50, 8}, {50, 18}}, color = {0, 0, 255}));
-  end OR;
+  annotation(
+        Icon(graphics = {Rectangle(origin = {-1, 1}, extent = {{-97, 97}, {97, -97}}), Text(origin = {-48, 81}, extent = {{-8, 7}, {8, -7}}, textString = "a"), Text(origin = {-46, -71}, extent = {{-10, 11}, {10, -11}}, textString = "b"), Text(origin = {50, 2}, extent = {{-8, 8}, {8, -8}}, textString = "y"), Text(origin = {-27, 1}, extent = {{-35, 19}, {35, -19}}, textString = "OR")}));end OR;
 
     model NOT
     Modelica.Electrical.Analog.Interfaces.Pin a annotation(
-        Placement(visible = true, transformation(origin = {-62, 64}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-62, 64}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+        Placement(visible = true, transformation(origin = {-62, 64}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-74, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.Pin y annotation(
-        Placement(visible = true, transformation(origin = {62, 10}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {62, 10}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+        Placement(visible = true, transformation(origin = {62, 10}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {78, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   NAND nand annotation(
         Placement(visible = true, transformation(origin = {2, 18}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
     equation
@@ -221,7 +225,8 @@ end TestVolladdierer;
         Line(points = {{10, 18}, {62, 18}, {62, 10}}, color = {0, 0, 255}));
   connect(a, nand.b) annotation(
         Line(points = {{-62, 64}, {-62, 10}, {-6, 10}}, color = {0, 0, 255}));
-    end NOT;
+    annotation(
+        Icon(graphics = {Rectangle(origin = {0, 1}, extent = {{-98, 97}, {98, -97}}), Text(origin = {-52, -1}, extent = {{-8, 7}, {8, -7}}, textString = "a"), Text(origin = {56, 0}, extent = {{-8, 8}, {8, -8}}, textString = "b"), Text(origin = {3, 55}, extent = {{-37, 19}, {37, -19}}, textString = "NOT")}));end NOT;
   end LogicGates;
 
   package SimpleMath
@@ -235,13 +240,13 @@ end TestVolladdierer;
   Modelica.Electrical.Analog.Interfaces.Pin a annotation(
       Placement(visible = true, transformation(origin = {-78, 82}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-78, 82}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.Pin b annotation(
-      Placement(visible = true, transformation(origin = {-78, 52}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-78, 52}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      Placement(visible = true, transformation(origin = {-78, 52}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-78, 38}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.Pin c_in annotation(
-      Placement(visible = true, transformation(origin = {-72, -40}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-82, -84}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      Placement(visible = true, transformation(origin = {-72, -40}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-74, -72}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.Pin c_out annotation(
-      Placement(visible = true, transformation(origin = {66, 56}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {78, 84}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      Placement(visible = true, transformation(origin = {66, 56}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {70, 82}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.Pin s annotation(
-      Placement(visible = true, transformation(origin = {64, -30}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {80, -74}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      Placement(visible = true, transformation(origin = {64, -30}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {72, -72}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Projekt.LogicGates.OR or1 annotation(
       Placement(visible = true, transformation(origin = {34, 8}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   equation
@@ -262,18 +267,18 @@ end TestVolladdierer;
   connect(halbaddierer1.a, a) annotation(
       Line(points = {{-32, 58}, {-32, 82}, {-78, 82}}, color = {0, 0, 255}));
   annotation(
-      Icon(graphics = {Text(origin = {45, 85}, extent = {{-19, 11}, {19, -11}}, textString = "c_out"), Text(origin = {58, -70}, extent = {{-24, 12}, {24, -12}}, textString = "s"), Text(origin = {-37, -72}, extent = {{-17, 12}, {17, -12}}, textString = "c_in"), Text(origin = {-52, 79}, extent = {{-6, 5}, {6, -5}}, textString = "a"), Text(origin = {-49, 46}, extent = {{-9, 8}, {9, -8}}, textString = "b"), Rectangle(origin = {-2, 2}, extent = {{-96, 98}, {96, -98}})}));end Volladdierer;
+      Icon(graphics = {Text(origin = {37, 84}, extent = {{-13, 10}, {13, -10}}, textString = "c_out"), Text(origin = {46, -69}, extent = {{-8, 9}, {8, -9}}, textString = "s"), Text(origin = {-47, -73}, extent = {{-13, 9}, {13, -9}}, textString = "c_in"), Text(origin = {-54, 83}, extent = {{-10, 9}, {10, -9}}, textString = "a"), Text(origin = {-53, 36}, extent = {{-9, 8}, {9, -8}}, textString = "b"), Rectangle(origin = {-2, 2}, extent = {{-96, 98}, {96, -98}}), Text(origin = {1, 2}, extent = {{-55, 18}, {55, -18}}, textString = "Volladdierer")}));end Volladdierer;
 
 
   model Halbaddierer
   Modelica.Electrical.Analog.Interfaces.Pin a annotation(
-      Placement(visible = true, transformation(origin = {-76, 82}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-76, 82}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      Placement(visible = true, transformation(origin = {-76, 82}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-72, 80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.Pin b annotation(
       Placement(visible = true, transformation(origin = {-74, -80}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-74, -80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.Pin s annotation(
-      Placement(visible = true, transformation(origin = {74, 38}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {74, 38}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      Placement(visible = true, transformation(origin = {74, 38}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {78, 76}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Interfaces.Pin c annotation(
-      Placement(visible = true, transformation(origin = {70, -62}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {70, -62}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      Placement(visible = true, transformation(origin = {70, -62}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {80, -78}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Projekt.LogicGates.XOR xor annotation(
       Placement(visible = true, transformation(origin = {0, 46}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Projekt.LogicGates.AND and1 annotation(
@@ -292,13 +297,12 @@ end TestVolladdierer;
   connect(b, and1.b) annotation(
       Line(points = {{-74, -80}, {-38, -80}, {-38, -48}, {-14, -48}}, color = {0, 0, 255}));
   annotation(
-      Icon(graphics = {Text(origin = {70, 63}, extent = {{-14, 7}, {14, -7}}, textString = "s"), Text(origin = {64, -34}, extent = {{-18, 16}, {18, -16}}, textString = "c")}));end Halbaddierer;
+      Icon(graphics = {Text(origin = {53, 79}, extent = {{-9, 9}, {9, -9}}, textString = "s"), Text(origin = {51, -78}, extent = {{-7, 10}, {7, -10}}, textString = "c"), Text(origin = {-46, 81}, extent = {{-8, 9}, {8, -9}}, textString = "a"), Text(origin = {-49, -80}, extent = {{-9, 8}, {9, -8}}, textString = "b"), Text(origin = {-3, 7}, extent = {{-79, 27}, {79, -27}}, textString = "Halbaddierer"), Rectangle(origin = {-1, 1}, extent = {{-97, 97}, {97, -97}})}));end Halbaddierer;
 
     model Addierer extends Interfaces.BitInterface;
     
     Volladdierer volladdierer[bits - 1];
-    Halbaddierer halbaddierer annotation(
-        Placement(visible = true, transformation(origin = {66, 14}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Halbaddierer halbaddierer;
     
     Modelica.Electrical.Analog.Interfaces.Pin b[bits];
     
@@ -326,9 +330,9 @@ end TestVolladdierer;
         Placement(visible = true, transformation(origin = {64, 8}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
       LogicGates.NOT not_[bits];
       Modelica.Electrical.Analog.Interfaces.Pin vcc annotation(
-        Placement(visible = true, transformation(origin = {-40, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-70, 56}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+        Placement(visible = true, transformation(origin = {-40, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-70, 82}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
     Modelica.Electrical.Analog.Interfaces.Pin ground annotation(
-        Placement(visible = true, transformation(origin = {24, -54}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-76, -86}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+        Placement(visible = true, transformation(origin = {24, -54}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-68, -76}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
     equation
     
       connect(addierer.b[1], vcc);
@@ -342,7 +346,7 @@ end TestVolladdierer;
         connect(addierer.s[i], s[i]);
       end for;
     annotation(
-        Icon(graphics = {Text(origin = {-69, 82}, extent = {{-21, 10}, {21, -10}}, textString = "Vcc"), Text(origin = {-76, -59}, extent = {{-16, 9}, {16, -9}}, textString = "Ground")}));end Zweierkomplement;
+        Icon(graphics = {Text(origin = {-39, 82}, extent = {{-21, 10}, {21, -10}}, textString = "Vcc"), Text(origin = {-30, -77}, extent = {{-16, 9}, {16, -9}}, textString = "Ground")}));end Zweierkomplement;
 
 
   end SimpleMath;
