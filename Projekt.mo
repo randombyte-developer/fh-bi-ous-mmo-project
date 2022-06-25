@@ -31,7 +31,7 @@ Projekt.SimpleMath.Zweierkomplement zk(bits=size(a, 1)) annotation(
   constant Integer a[:] = {0, 1};
   constant Integer b[:] = {1, 0};
 equation
-  assert(size(a, 1) == size(b, 1), "a len a == len b");
+  assert(size(a, 1) == size(b, 1), "len a == len b");
 
   connect(constantVoltage.n, ground.p) annotation(
     Line(points = {{-64, 46}, {-64, -16}, {-62, -16}, {-62, -76}}, color = {0, 0, 255}));
