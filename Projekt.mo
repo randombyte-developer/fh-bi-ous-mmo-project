@@ -374,19 +374,20 @@ package Projekt
       Placement(visible = true, transformation(origin = {-66, 30}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
     Modelica.Electrical.Analog.Basic.Ground ground annotation(
       Placement(visible = true, transformation(origin = {-66, -62}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-    
     //constant Integer a[:] = {0, 1, 0, 0};
-    
-    Modelica.Electrical.Analog.Interfaces.Pin y[dezimalZuBinaer.bits];
+    //Modelica.Electrical.Analog.Interfaces.Pin y[dezimalZuBinaer.bits];
     
   LogicDevice.DezimalZuBinaer dezimalZuBinaer(a=6, bits=4) annotation(
       Placement(visible = true, transformation(origin = {34, -22}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  LogicDevice.BinearZuDezimal binearZuDezimal(bits=dezimalZuBinaer.bits) annotation(
+      Placement(visible = true, transformation(origin = {-30, -78}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   equation
     connect(constantVoltage.n, ground.p) annotation(
       Line(points = {{-66, 20}, {-66, -52}}, color = {0, 0, 255}));
     connect(dezimalZuBinaer.y, multiplikator.a);
     connect(ground.p, multiplikator.ground);
-    connect(y, multiplikator.y);
+    //connect(y, multiplikator.y);
+    connect(binearZuDezimal.a, multiplikator.y);
   end TestMultiplikator;
 
   package LogicDevice
@@ -422,6 +423,26 @@ package Projekt
         end if;
       end for;
     end DezimalZuBinaer;
+
+    model BinearZuDezimal
+      parameter Integer bits = 4;
+      Modelica.Electrical.Analog.Interfaces.Pin a[bits];
+      output Integer y;
+      
+      Integer temp;
+      
+    algorithm
+      temp := 0;
+      for i in 1:bits loop
+         temp := integer(temp + 2^(i-1) * (if (a[i].v > 3) then 1 else 0));
+      end for;
+     
+    equation
+      y = temp;
+      for i in 1:bits loop
+        a[i].i = 0;
+      end for;
+    end BinearZuDezimal;
   end LogicDevice;
   annotation(
     uses(Modelica(version = "4.0.0")));
