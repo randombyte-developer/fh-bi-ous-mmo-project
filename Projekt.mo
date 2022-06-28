@@ -447,7 +447,7 @@ package Projekt
     parameter Integer b = 3;
     parameter Integer bits = 4;
     
-    parameter Operation operation = Operation.Addition;
+    parameter Operation operation = Operation.Multiplikation;
   
   SimpleMath.Addierer addierer(bits=bits) annotation(
       Placement(visible = true, transformation(origin = {-44, 2}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -465,25 +465,38 @@ package Projekt
       Placement(visible = true, transformation(origin = {-54, 62}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Sources.ConstantVoltage constantVoltage(V = 5)  annotation(
       Placement(visible = true, transformation(origin = {26, 56}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
+  SimpleMath.Multiplikator multiplikator(maxFactor=b, bits=bits) annotation(
+      Placement(visible = true, transformation(origin = {-42, -60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   equation
   
       connect(zweierkomplement.vcc, constantVoltage.p);
-      connect(zweierkomplement.ground, constantVoltage.n);
+      connect(zweierkomplement.ground, ground.p);
+      connect(multiplikator.ground, ground.p);
   
     if operation == Operation.Addition then
       connect(dezimalZuBinaer1.y, addierer.a);
       connect(dezimalZuBinaer2.y, addierer.b);
       connect(y, addierer.y);
       for i in 1:bits loop
+        connect(multiplikator.a[i], ground.p);
         connect(zweierkomplement.a[i], ground.p);
-        
       end for;
     elseif operation == Operation.Subtraktion then
       connect(dezimalZuBinaer1.y, addierer.a);
       connect(dezimalZuBinaer2.y, zweierkomplement.a);
       connect(addierer.b, zweierkomplement.y);
       connect(y, addierer.y);
-  
+      for i in 1:bits loop
+        connect(multiplikator.a[i], ground.p);
+      end for;
+    else
+      connect(multiplikator.a, dezimalZuBinaer1.y);
+      connect(y, multiplikator.y);
+      for i in 1:bits loop
+        connect(zweierkomplement.a[i], ground.p);
+        connect(addierer.a[i], ground.p);
+        connect(addierer.b[i], ground.p);
+      end for;
     end if;
     connect(constantVoltage.n, ground.p) annotation(
       Line(points = {{26, 46}, {36, 46}, {36, 16}, {34, 16}}, color = {0, 0, 255}));
