@@ -374,20 +374,16 @@ package Projekt
       Placement(visible = true, transformation(origin = {-66, 30}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
     Modelica.Electrical.Analog.Basic.Ground ground annotation(
       Placement(visible = true, transformation(origin = {-66, -62}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-    //constant Integer a[:] = {0, 1, 0, 0};
-    //Modelica.Electrical.Analog.Interfaces.Pin y[dezimalZuBinaer.bits];
+    Modelica.Electrical.Analog.Interfaces.Pin y[dezimalZuBinaer.bits];
     
   LogicDevice.DezimalZuBinaer dezimalZuBinaer(a=6, bits=4) annotation(
       Placement(visible = true, transformation(origin = {34, -22}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  LogicDevice.BinearZuDezimal binearZuDezimal(bits=dezimalZuBinaer.bits) annotation(
-      Placement(visible = true, transformation(origin = {-30, -78}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   equation
     connect(constantVoltage.n, ground.p) annotation(
       Line(points = {{-66, 20}, {-66, -52}}, color = {0, 0, 255}));
     connect(dezimalZuBinaer.y, multiplikator.a);
     connect(ground.p, multiplikator.ground);
-    //connect(y, multiplikator.y);
-    connect(binearZuDezimal.a, multiplikator.y);
+    connect(y, multiplikator.y);
   end TestMultiplikator;
 
   package LogicDevice
@@ -444,6 +440,39 @@ package Projekt
       end for;
     end BinearZuDezimal;
   end LogicDevice;
+
+  model Calculator
+  
+    parameter Integer a = 4;
+    parameter Integer b = 3;
+    parameter Integer bits = 4;
+    
+    parameter Operation operation = Operation.Addition;
+  
+  SimpleMath.Addierer addierer(bits=bits) annotation(
+      Placement(visible = true, transformation(origin = {-44, 2}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  
+  LogicDevice.DezimalZuBinaer dezimalZuBinaer1(a=a, bits=bits) annotation(
+      Placement(visible = true, transformation(origin = {50, -12}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  
+  Modelica.Electrical.Analog.Basic.Ground ground annotation(
+      Placement(visible = true, transformation(origin = {-8, -54}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  LogicDevice.DezimalZuBinaer dezimalZuBinaer2(a=b, bits=bits) annotation(
+      Placement(visible = true, transformation(origin = {6, -64}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  
+    Modelica.Electrical.Analog.Interfaces.Pin y[bits];
+  equation
+  
+    if operation == Operation.Addition then
+        connect(dezimalZuBinaer1.y, addierer.a);
+        connect(dezimalZuBinaer2.y, addierer.b);
+        connect(y, addierer.y);
+    end if;
+    
+  
+  end Calculator;
+
+  type Operation = enumeration(Addition, Subtraktion, Multiplikation);
   annotation(
     uses(Modelica(version = "4.0.0")));
 end Projekt;
