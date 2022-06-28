@@ -348,6 +348,26 @@ end TestVolladdierer;
     annotation(
         Icon(graphics = {Text(origin = {-39, 82}, extent = {{-21, 10}, {21, -10}}, textString = "Vcc"), Text(origin = {-30, -77}, extent = {{-16, 9}, {16, -9}}, textString = "Ground")}));end Zweierkomplement;
 
+    model Multiplikator extends Interfaces.BitsIoInterface;
+      parameter Integer maxFactor = 5;
+      Addierer addierer[maxFactor](each bits=bits);
+      
+      Modelica.Electrical.Analog.Interfaces.Pin b[bits];
+    equation
+    
+      connect(addierer[1].a, a);
+      connect(addierer[maxFactor].y, y);
+    
+      for i in 1:maxFactor loop
+        connect(addierer[i].b, b);
+      end for;
+    
+      for i in 1:(maxFactor-1) loop
+        connect(addierer[i].y, addierer[i + 1].a);
+      end for;
+
+    end Multiplikator;
+
 
   end SimpleMath;
 
@@ -363,6 +383,41 @@ end TestVolladdierer;
 
     end BitsIoInterface;
   end Interfaces;
+
+  model TestMultiplikator
+  Projekt.SimpleMath.Multiplikator multiplikator(maxFactor=5, bits=size(a, 1)) annotation(
+      Placement(visible = true, transformation(origin = {-2, 4}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Electrical.Analog.Sources.ConstantVoltage constantVoltage(V = 5)  annotation(
+      Placement(visible = true, transformation(origin = {-66, 30}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
+  Modelica.Electrical.Analog.Basic.Ground ground annotation(
+      Placement(visible = true, transformation(origin = {-66, -62}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  
+    constant Integer a[:] = {0, 1};
+    constant Integer b[:] = {1, 0};
+    Modelica.Electrical.Analog.Interfaces.Pin y[size(a, 1)];
+  equation
+    connect(constantVoltage.n, ground.p) annotation(
+      Line(points = {{-66, 20}, {-66, -52}}, color = {0, 0, 255}));
+  
+    assert(size(a, 1) == size(b, 1), "len a == len b");
+  
+    for i in 1:size(a, 1) loop
+      if a[i] == 1 then
+        connect(multiplikator.a[i], constantVoltage.p);
+      else
+        connect(multiplikator.a[i], ground.p);
+      end if;
+  
+      if b[i] == 1 then
+        connect(multiplikator.b[i], constantVoltage.p);
+      else
+        connect(multiplikator.b[i], ground.p);
+      end if;
+    end for;
+    
+    connect(y, multiplikator.y);
+  
+  end TestMultiplikator;
   annotation(
     uses(Modelica(version = "4.0.0")));
 end Projekt;
