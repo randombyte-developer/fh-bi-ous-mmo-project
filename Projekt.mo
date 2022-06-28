@@ -1,7 +1,7 @@
 package Projekt
 
  
-  model Test4
+  model Test8
   Modelica.Electrical.Analog.Sources.ConstantVoltage constantVoltage(V = 5)  annotation(
       Placement(visible = true, transformation(origin = {-52, 10}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
   Modelica.Electrical.Analog.Basic.Ground ground annotation(
@@ -15,7 +15,7 @@ package Projekt
       Line(points = {{0, 4}, {-30, 4}, {-30, 20}, {-52, 20}}, color = {0, 0, 255}));
   connect(ground.p, nand.a) annotation(
       Line(points = {{-50, -56}, {52, -56}, {52, 42}, {0, 42}, {0, 20}}, color = {0, 0, 255}));
-  end Test4;
+  end Test8;
 
  
 model TestVolladdierer
