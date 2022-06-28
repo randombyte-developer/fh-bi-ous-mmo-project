@@ -351,15 +351,19 @@ end TestVolladdierer;
     model Multiplikator extends Interfaces.BitsIoInterface;
       parameter Integer maxFactor = 5;
       Addierer addierer[maxFactor](each bits=bits);
-      
-      Modelica.Electrical.Analog.Interfaces.Pin b[bits];
+      Modelica.Electrical.Analog.Interfaces.Pin ground annotation(
+        Placement(visible = true, transformation(origin = {-56, -12}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-56, -12}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
     equation
     
-      connect(addierer[1].a, a);
+      for i in 1:bits loop
+        connect(addierer[1].a[i], ground);
+      end for;
+      
       connect(addierer[maxFactor].y, y);
     
-      for i in 1:maxFactor loop
-        connect(addierer[i].b, b);
+    
+      for i in 1:(maxFactor) loop
+        connect(addierer[i].b, a);
       end for;
     
       for i in 1:(maxFactor-1) loop
@@ -385,21 +389,18 @@ end TestVolladdierer;
   end Interfaces;
 
   model TestMultiplikator
-  Projekt.SimpleMath.Multiplikator multiplikator(maxFactor=5, bits=size(a, 1)) annotation(
+  Projekt.SimpleMath.Multiplikator multiplikator(maxFactor=2, bits=size(a, 1)) annotation(
       Placement(visible = true, transformation(origin = {-2, 4}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Modelica.Electrical.Analog.Sources.ConstantVoltage constantVoltage(V = 5)  annotation(
       Placement(visible = true, transformation(origin = {-66, 30}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
   Modelica.Electrical.Analog.Basic.Ground ground annotation(
       Placement(visible = true, transformation(origin = {-66, -62}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   
-    constant Integer a[:] = {0, 1, 1, 0};
-    constant Integer b[:] = {1, 0, 1, 0};
+    constant Integer a[:] = {0, 1, 0, 0};
     Modelica.Electrical.Analog.Interfaces.Pin y[size(a, 1)];
   equation
     connect(constantVoltage.n, ground.p) annotation(
       Line(points = {{-66, 20}, {-66, -52}}, color = {0, 0, 255}));
-  
-    assert(size(a, 1) == size(b, 1), "len a == len b");
   
     for i in 1:size(a, 1) loop
       if a[i] == 1 then
@@ -407,17 +408,36 @@ end TestVolladdierer;
       else
         connect(multiplikator.a[i], ground.p);
       end if;
-  
-      if b[i] == 1 then
-        connect(multiplikator.b[i], constantVoltage.p);
-      else
-        connect(multiplikator.b[i], ground.p);
-      end if;
     end for;
     
+    connect(ground.p, multiplikator.ground);
     connect(y, multiplikator.y);
   
   end TestMultiplikator;
+
+  package LogicDevice
+    model Demultiplexer
+    
+      constant Integer bits = 4;
+      constant Integer two = 2;
+    
+      Modelica.Electrical.Analog.Interfaces.Pin a[bits];
+      Modelica.Electrical.Analog.Interfaces.Pin y[integer(two^bits)];
+      Modelica.Electrical.Analog.Interfaces.Pin vcc annotation(
+        Placement(visible = true, transformation(origin = {-36, -18}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-36, -18}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Electrical.Analog.Interfaces.Pin ground annotation(
+        Placement(visible = true, transformation(origin = {-30, -68}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-30, -68}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    equation
+    
+      for i in 1:bits loop
+        if i == 1 * a[1].v + 2^1*a[2].v + 2^2*a[3].v + 2^3*a[4].v then
+          connect(y[i], vcc);
+        else
+          connect(y[i], ground);
+        end if;
+      end for;
+    end Demultiplexer;
+  end LogicDevice;
   annotation(
     uses(Modelica(version = "4.0.0")));
 end Projekt;
