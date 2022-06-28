@@ -25,11 +25,11 @@ Modelica.Electrical.Analog.Basic.Ground ground annotation(
     Placement(visible = true, transformation(origin = {-62, -86}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 Projekt.SimpleMath.Addierer addierer(bits=size(a, 1)) annotation(
     Placement(visible = true, transformation(origin = {22, 16}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-Projekt.SimpleMath.Zweierkomplement zk(bits=size(a, 1)) annotation(
-   Placement(visible = true, transformation(origin = {-6, 62}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+/*Projekt.SimpleMath.Zweierkomplement zk(bits=size(a, 1)) annotation(
+   Placement(visible = true, transformation(origin = {-6, 62}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));*/
 
-  constant Integer a[:] = {0, 1};
-  constant Integer b[:] = {1, 0};
+  constant Integer a[:] = {0, 1, 1, 0}; // 6 (0110) + 4 (0010) = 10 (0101)
+  constant Integer b[:] = {0, 0, 1, 0};
 equation
   assert(size(a, 1) == size(b, 1), "len a == len b");
 
@@ -44,17 +44,17 @@ equation
     end if;
 
     if b[i] == 1 then
-      connect(zk.a[i], constantVoltage.p);
+      connect(addierer.b[i], constantVoltage.p);
     else
-      connect(zk.a[i], ground.p);
+      connect(addierer.b[i], ground.p);
     end if;
     
-    connect(zk.y[i], addierer.b[i]);
+    //connect(zk.y[i], addierer.b[i]);
   end for;
- connect(constantVoltage.p, zk.vcc) annotation(
+ /*connect(constantVoltage.p, zk.vcc) annotation(
       Line(points = {{-64, 66}, {-12, 66}, {-12, 68}}, color = {0, 0, 255}));
  connect(zk.ground, constantVoltage.n) annotation(
-      Line(points = {{-14, 54}, {-42, 54}, {-42, 46}, {-64, 46}}, color = {0, 0, 255}));
+      Line(points = {{-14, 54}, {-42, 54}, {-42, 46}, {-64, 46}}, color = {0, 0, 255}));*/
 
 end TestVolladdierer;
 
@@ -392,8 +392,8 @@ end TestVolladdierer;
   Modelica.Electrical.Analog.Basic.Ground ground annotation(
       Placement(visible = true, transformation(origin = {-66, -62}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   
-    constant Integer a[:] = {0, 1};
-    constant Integer b[:] = {1, 0};
+    constant Integer a[:] = {0, 1, 1, 0};
+    constant Integer b[:] = {1, 0, 1, 0};
     Modelica.Electrical.Analog.Interfaces.Pin y[size(a, 1)];
   equation
     connect(constantVoltage.n, ground.p) annotation(
