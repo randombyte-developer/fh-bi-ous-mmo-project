@@ -447,7 +447,7 @@ package Projekt
     parameter Integer b = 3;
     parameter Integer bits = 4;
     
-    parameter Operation operation = Operation.Subtraktion;
+    parameter Operation operation = Operation.Addition;
   
   SimpleMath.Addierer addierer(bits=bits) annotation(
       Placement(visible = true, transformation(origin = {-44, 2}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -467,17 +467,23 @@ package Projekt
       Placement(visible = true, transformation(origin = {26, 56}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
   equation
   
+      connect(zweierkomplement.vcc, constantVoltage.p);
+      connect(zweierkomplement.ground, constantVoltage.n);
+  
     if operation == Operation.Addition then
       connect(dezimalZuBinaer1.y, addierer.a);
       connect(dezimalZuBinaer2.y, addierer.b);
       connect(y, addierer.y);
+      for i in 1:bits loop
+        connect(zweierkomplement.a[i], ground.p);
+        
+      end for;
     elseif operation == Operation.Subtraktion then
       connect(dezimalZuBinaer1.y, addierer.a);
       connect(dezimalZuBinaer2.y, zweierkomplement.a);
       connect(addierer.b, zweierkomplement.y);
       connect(y, addierer.y);
-      connect(zweierkomplement.vcc, constantVoltage.p);
-      connect(zweierkomplement.ground, constantVoltage.n);
+  
     end if;
     connect(constantVoltage.n, ground.p) annotation(
       Line(points = {{26, 46}, {36, 46}, {36, 16}, {34, 16}}, color = {0, 0, 255}));
