@@ -52,6 +52,9 @@ package Projekt
 
   package LogicGates
     model NAND
+    
+      constant Boolean useTransistors = true;
+    
       // Elektrische Gatter, Ein- und Ausgangspins, sowie Constant-Source und Ground werden hinzugefuegt
       Modelica.Electrical.Analog.Interfaces.Pin a annotation(
         Placement(visible = true, transformation(origin = {-74, 84}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-78, 80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -59,55 +62,68 @@ package Projekt
         Placement(visible = true, transformation(origin = {-76, -76}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-76, -78}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
       Modelica.Electrical.Analog.Interfaces.Pin y annotation(
         Placement(visible = true, transformation(origin = {80, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {72, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-      Modelica.Electrical.Analog.Semiconductors.NMOS t3 annotation(
+      
+      Modelica.Electrical.Analog.Semiconductors.NMOS t3 if useTransistors annotation(
         Placement(visible = true, transformation(origin = {4, -28}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-      Modelica.Electrical.Analog.Semiconductors.NMOS t4 annotation(
+      Modelica.Electrical.Analog.Semiconductors.NMOS t4 if useTransistors annotation(
         Placement(visible = true, transformation(origin = {0, -66}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-      Modelica.Electrical.Analog.Semiconductors.PMOS t1 annotation(
+      Modelica.Electrical.Analog.Semiconductors.PMOS t1 if useTransistors annotation(
         Placement(visible = true, transformation(origin = {-40, 66}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-      Modelica.Electrical.Analog.Semiconductors.PMOS t2 annotation(
+      Modelica.Electrical.Analog.Semiconductors.PMOS t2 if useTransistors annotation(
         Placement(visible = true, transformation(origin = {32, 40}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+      
       Modelica.Electrical.Analog.Sources.ConstantVoltage constantVoltage(V = 5) annotation(
         Placement(visible = true, transformation(origin = {12, 86}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
       Modelica.Electrical.Analog.Basic.Ground ground annotation(
         Placement(visible = true, transformation(origin = {50, 76}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
       Modelica.Electrical.Analog.Basic.Ground ground1 annotation(
         Placement(visible = true, transformation(origin = {56, -86}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    
+      
     equation
 // Verbindungen zwischen den eingebundenen Klassen
     // -> Dadurch logisches NAND Gatter erzeugt wobei 5V einer 1 entspricht und 0V einer 0
-      connect(t1.B, t1.D) annotation(
-        Line(points = {{-30, 66}, {-30, 72}}, color = {0, 0, 255}));
-      connect(t2.D, t2.B) annotation(
-        Line(points = {{44, 48}, {44, 42}}, color = {0, 0, 255}));
+      
+      if useTransistors then
+        connect(t1.B, t1.D) annotation(
+          Line(points = {{-30, 66}, {-30, 72}}, color = {0, 0, 255}));
+        connect(t2.D, t2.B) annotation(
+          Line(points = {{44, 48}, {44, 42}}, color = {0, 0, 255}));
+        connect(t4.S, ground1.p) annotation(
+          Line(points = {{10, -72}, {56, -72}, {56, -76}}, color = {0, 0, 255}));
+        connect(t4.G, b) annotation(
+          Line(points = {{-10, -72}, {-76, -72}, {-76, -76}}, color = {0, 0, 255}));
+        connect(t1.G, a) annotation(
+          Line(points = {{-50, 60}, {-52, 60}, {-52, 84}, {-74, 84}}, color = {0, 0, 255}));
+        connect(y, t1.S) annotation(
+          Line(points = {{80, 0}, {-30, 0}, {-30, 60}}, color = {0, 0, 255}));
+        connect(y, t2.S) annotation(
+          Line(points = {{80, 0}, {42, 0}, {42, 34}}, color = {0, 0, 255}));
+        connect(t2.S, t3.D) annotation(
+          Line(points = {{42, 34}, {42, -22}, {14, -22}}, color = {0, 0, 255}));
+        connect(t3.S, t4.D) annotation(
+          Line(points = {{14, -34}, {22, -34}, {22, -58}, {10, -58}, {10, -60}}, color = {0, 0, 255}));
+        connect(t4.G, t2.G) annotation(
+          Line(points = {{-10, -72}, {-10, 34}, {22, 34}}, color = {0, 0, 255}));
+        connect(constantVoltage.p, t2.D) annotation(
+          Line(points = {{2, 86}, {2, 60}, {42, 60}, {42, 46}}, color = {0, 0, 255}));
+        connect(t1.D, constantVoltage.p) annotation(
+          Line(points = {{-30, 72}, {-30, 86}, {2, 86}}, color = {0, 0, 255}));
+        connect(t3.G, t1.G) annotation(
+          Line(points = {{-6, -34}, {-50, -34}, {-50, 60}}, color = {0, 0, 255}));
+        connect(t3.B, t3.S) annotation(
+          Line(points = {{14, -28}, {14, -34}}, color = {0, 0, 255}));
+        connect(t4.B, t4.S) annotation(
+          Line(points = {{10, -66}, {10, -72}}, color = {0, 0, 255}));
+      else
+        y.v = if (not (a.v > 3 and b.v > 3)) then 5 else 0;
+        a.i = 0;
+        b.i = 0;
+      end if; 
+      
       connect(constantVoltage.n, ground.p) annotation(
         Line(points = {{22, 86}, {50, 86}}, color = {0, 0, 255}));
-      connect(t4.S, ground1.p) annotation(
-        Line(points = {{10, -72}, {56, -72}, {56, -76}}, color = {0, 0, 255}));
-      connect(t4.G, b) annotation(
-        Line(points = {{-10, -72}, {-76, -72}, {-76, -76}}, color = {0, 0, 255}));
-      connect(t1.G, a) annotation(
-        Line(points = {{-50, 60}, {-52, 60}, {-52, 84}, {-74, 84}}, color = {0, 0, 255}));
-      connect(y, t1.S) annotation(
-        Line(points = {{80, 0}, {-30, 0}, {-30, 60}}, color = {0, 0, 255}));
-      connect(y, t2.S) annotation(
-        Line(points = {{80, 0}, {42, 0}, {42, 34}}, color = {0, 0, 255}));
-      connect(t2.S, t3.D) annotation(
-        Line(points = {{42, 34}, {42, -22}, {14, -22}}, color = {0, 0, 255}));
-      connect(t3.S, t4.D) annotation(
-        Line(points = {{14, -34}, {22, -34}, {22, -58}, {10, -58}, {10, -60}}, color = {0, 0, 255}));
-      connect(t4.G, t2.G) annotation(
-        Line(points = {{-10, -72}, {-10, 34}, {22, 34}}, color = {0, 0, 255}));
-      connect(constantVoltage.p, t2.D) annotation(
-        Line(points = {{2, 86}, {2, 60}, {42, 60}, {42, 46}}, color = {0, 0, 255}));
-      connect(t1.D, constantVoltage.p) annotation(
-        Line(points = {{-30, 72}, {-30, 86}, {2, 86}}, color = {0, 0, 255}));
-      connect(t3.G, t1.G) annotation(
-        Line(points = {{-6, -34}, {-50, -34}, {-50, 60}}, color = {0, 0, 255}));
-      connect(t3.B, t3.S) annotation(
-        Line(points = {{14, -28}, {14, -34}}, color = {0, 0, 255}));
-      connect(t4.B, t4.S) annotation(
-        Line(points = {{10, -66}, {10, -72}}, color = {0, 0, 255}));
+        
       annotation(
         Icon(graphics = {Rectangle(extent = {{-98, 98}, {98, -98}}), Text(origin = {-33, 1}, extent = {{-35, 27}, {35, -27}}, textString = "NAND"), Text(origin = {-51, 80}, extent = {{-11, 8}, {11, -8}}, textString = "a"), Text(origin = {-55, -76}, extent = {{-11, 8}, {11, -8}}, textString = "b"), Text(origin = {52, 1}, extent = {{-8, 9}, {8, -9}}, textString = "y")}));
     end NAND;
@@ -490,10 +506,10 @@ package Projekt
 model Calculator
 
   parameter Integer a = 2;                                  // Eingabe des ersten Wertes (falls Subtraktion -> der größere Wert)
-  parameter Integer b = 1;                                  // Eingabe des zweiten Wertes (falls Subtraktion -> nicht negativ angeben)
-  parameter Operation operation = Operation.Addition;    // Eingabe der geünschten mathematischen Operation (+, -, *)
+  parameter Integer b = 4;                                  // Eingabe des zweiten Wertes (falls Subtraktion -> nicht negativ angeben)
+  parameter Operation operation = Operation.Multiplikation;    // Eingabe der geünschten mathematischen Operation (+, -, *)
   
-  parameter Integer bits = 4;                               // Eingabe der benötigten Bits
+  parameter Integer bits = 8;                               // Eingabe der benötigten Bits
   
 // Ein addierer-Modell, zwei dezimalZuBinaer-Modelle, ein binearZuDezimal-Modell, ein zweierkomplement-Modell und ein multiplikator-Modell werden eingefügt
 // Dazu kommt ein Pin zum Auslesen des Ergebnisses sowie ein ground und eine constantVoltage
