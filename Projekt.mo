@@ -468,22 +468,18 @@ package Projekt
       Modelica.Electrical.Analog.Interfaces.Pin a[bits];
       output Integer y;
       
-      Integer temp1;
-      Real temp2;
-      Real temp3;
-      Real temp4;
+      Integer result;
+      Real temp;
       
     algorithm
-      temp1 := 0;
+      result := 0;
       for i in 1:bits loop
-        temp2 := 2^(i-1);
-        temp4 := if (a[i].v > 3) then 1 else 0;
-        temp3 := temp2 * temp4;
-        temp1 := integer(temp1 + temp3);
+        temp := 2^(i-1) * (if (a[i].v > 3) then 1 else 0);
+        result := integer(result + temp);
       end for;
      
     equation
-      y = temp1;
+      y = result;
       for i in 1:bits loop
         a[i].i = 0;
       end for;
@@ -497,10 +493,10 @@ model Calculator
   parameter Integer b = 1;                                  // Eingabe des zweiten Wertes (falls Subtraktion -> nicht negativ angeben)
   parameter Operation operation = Operation.Addition;    // Eingabe der geünschten mathematischen Operation (+, -, *)
   
-  parameter Integer bits = 2;                               // Eingabe der benötigten Bits (Default ist 4 -> erstmal so lassen)
+  parameter Integer bits = 4;                               // Eingabe der benötigten Bits
   
 // Ein addierer-Modell, zwei dezimalZuBinaer-Modelle, ein binearZuDezimal-Modell, ein zweierkomplement-Modell und ein multiplikator-Modell werden eingefügt
-// Dazu kommt ein Pin zum auslesen des Ergebnisses sowie ein ground und eine constantVoltage
+// Dazu kommt ein Pin zum Auslesen des Ergebnisses sowie ein ground und eine constantVoltage
   
   Modelica.Electrical.Analog.Sources.ConstantVoltage constantVoltage(V = 5);
   Modelica.Electrical.Analog.Basic.Ground ground;
