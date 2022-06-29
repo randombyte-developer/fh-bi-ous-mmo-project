@@ -330,7 +330,7 @@ package Projekt
         connect(volladdierer[i].a, a[i + 1]);
         connect(volladdierer[i].b, b[i + 1]);
         connect(volladdierer[i].y, y[i + 1]);
-    // Eine weitere Gleichung wird erzeugt, sobald die Rechnung fertig ist, damit keine Konnektoren offen sind.
+    // Weitere Gleichungn werden erzeugt, sobald die Rechnung fertig ist, damit keine Konnektoren offen sind.
         if i <> bits - 1 then
           connect(volladdierer[i].c_out, volladdierer[i + 1].c_in);
         end if;
@@ -548,7 +548,7 @@ package Projekt
     Modelica.Electrical.Analog.Basic.Ground ground annotation(
       Placement(visible = true, transformation(origin = {26, 16}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
     LogicDevice.BinearZuDezimal binearZuDezimal(bits = bits);
-    SimpleMath.Zweierkomplement zweierkomplement annotation(
+    SimpleMath.Zweierkomplement zweierkomplement(bits=bits) annotation(
       Placement(visible = true, transformation(origin = {-54, 62}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
     Modelica.Electrical.Analog.Sources.ConstantVoltage constantVoltage(V = 5)  annotation(
       Placement(visible = true, transformation(origin = {26, 56}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
