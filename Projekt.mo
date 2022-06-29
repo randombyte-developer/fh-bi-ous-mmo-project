@@ -497,27 +497,26 @@ model Calculator
   parameter Integer b = 1;                                  // Eingabe des zweiten Wertes (falls Subtraktion -> nicht negativ angeben)
   parameter Operation operation = Operation.Addition;    // Eingabe der geünschten mathematischen Operation (+, -, *)
   
-  parameter Integer bits = 4;                               // Eingabe der benötigten Bits (Default ist 4 -> erstmal so lassen)
+  parameter Integer bits = 2;                               // Eingabe der benötigten Bits (Default ist 4 -> erstmal so lassen)
   
 // Ein addierer-Modell, zwei dezimalZuBinaer-Modelle, ein binearZuDezimal-Modell, ein zweierkomplement-Modell und ein multiplikator-Modell werden eingefügt
 // Dazu kommt ein Pin zum auslesen des Ergebnisses sowie ein ground und eine constantVoltage
-  SimpleMath.Addierer addierer(bits=bits) annotation(
-    Placement(visible = true, transformation(origin = {-44, 2}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-
-  LogicDevice.DezimalZuBinaer dezimalZuBinaer1(a=a, bits=bits) annotation(
-    Placement(visible = true, transformation(origin = {50, -12}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  LogicDevice.DezimalZuBinaer dezimalZuBinaer2(a=b, bits=bits) annotation(
-    Placement(visible = true, transformation(origin = {6, -64}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Electrical.Analog.Basic.Ground ground annotation(
-    Placement(visible = true, transformation(origin = {26, 16}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  LogicDevice.BinearZuDezimal binearZuDezimal(bits = bits);
-  SimpleMath.Zweierkomplement zweierkomplement annotation(
-    Placement(visible = true, transformation(origin = {-54, 62}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Modelica.Electrical.Analog.Sources.ConstantVoltage constantVoltage(V = 5)  annotation(
-    Placement(visible = true, transformation(origin = {26, 56}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
-  SimpleMath.Multiplikator multiplikator(factor=b, bits=bits) annotation(
-    Placement(visible = true, transformation(origin = {-42, -60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  
+  Modelica.Electrical.Analog.Sources.ConstantVoltage constantVoltage(V = 5);
+  Modelica.Electrical.Analog.Basic.Ground ground;
+  
+  LogicDevice.DezimalZuBinaer dezimalZuBinaer1(a=a, bits=bits);
+  LogicDevice.DezimalZuBinaer dezimalZuBinaer2(a=b, bits=bits);
+  
+  SimpleMath.Zweierkomplement zweierkomplement(bits=bits);
+  
+  SimpleMath.Addierer addierer(bits=bits);
+  SimpleMath.Multiplikator multiplikator(factor=b, bits=bits);
+  
+  LogicDevice.BinearZuDezimal binearZuDezimal(bits=bits);
+  
   output Integer result;
+  
 equation
 // benötigte "grounds" und "vccs" werden verbunden
     connect(zweierkomplement.vcc, constantVoltage.p);
