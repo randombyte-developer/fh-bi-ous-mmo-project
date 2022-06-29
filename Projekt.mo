@@ -464,137 +464,106 @@ package Projekt
 
     model BinearZuDezimal
     // Die binäre Zahl wird gemäß der Vorschrift in eine Dezimalzahl umgerechnet
-    parameter Integer bits = 4;
+      parameter Integer bits = 4;
       Modelica.Electrical.Analog.Interfaces.Pin a[bits];
-      Modelica.Electrical.Analog.Interfaces.Pin y;
-    // Leider hart gecoded. Funktioniert bis 8 Bit.
+      output Integer y;
+      
+      Integer temp1;
+      Real temp2;
+      Real temp3;
+      Real temp4;
+      
+    algorithm
+      temp1 := 0;
+      for i in 1:bits loop
+        temp2 := 2^(i-1);
+        temp4 := if (a[i].v > 3) then 1 else 0;
+        temp3 := temp2 * temp4;
+        temp1 := integer(temp1 + temp3);
+      end for;
+     
     equation
-      if bits == 1 then
-        y.v = (a[1].v*1)/5;
-        a[1].i = 0;
-      elseif bits == 2 then
-        y.v = (a[1].v*1)/5 + (a[2].v*2)/5;
-        a[1].i = 0;
-        a[2].i = 0;
-      elseif bits == 3 then
-        y.v = (a[1].v*1)/5 + (a[2].v*2)/5 + (a[3].v*4)/5;
-        a[1].i = 0;
-        a[2].i = 0;
-        a[3].i = 0;
-      elseif bits == 4 then
-        y.v = (a[1].v*1)/5 + (a[2].v*2)/5 + (a[3].v*4)/5 + (a[4].v*8)/5;
-        a[1].i = 0;
-        a[2].i = 0;
-        a[3].i = 0;
-        a[4].i = 0;
-      elseif bits == 5 then
-        y.v = (a[1].v*1)/5 + (a[2].v*2)/5 + (a[3].v*4)/5 + (a[4].v*8)/5 + (a[5].v*8)/5;
-        a[1].i = 0;
-        a[2].i = 0;
-        a[3].i = 0;
-        a[4].i = 0;
-        a[5].i = 0;
-      elseif bits == 6 then
-        y.v = (a[1].v*1)/5 + (a[2].v*2)/5 + (a[3].v*4)/5 + (a[4].v*8)/5 + (a[5].v*16)/5 + a[5].v*32;
-        a[1].i = 0;
-        a[2].i = 0;
-        a[3].i = 0;
-        a[4].i = 0;
-        a[5].i = 0;
-        a[6].i = 0;
-      elseif bits == 7 then
-        y.v = (a[1].v*1)/5 + (a[2].v*2)/5 + (a[3].v*4)/5 + (a[4].v*8)/5 + (a[5].v*16)/5 + (a[5].v*32)/5 + (a[6].v*64)/5;
-        a[1].i = 0;
-        a[2].i = 0;
-        a[3].i = 0;
-        a[4].i = 0;
-        a[5].i = 0;
-        a[6].i = 0;
-        a[7].i = 0;
-      else
-        y.v = (a[1].v*1)/5 + (a[2].v*2)/5 + (a[3].v*4)/5 + (a[4].v*8)/5 + (a[5].v*16)/5 + (a[5].v*32)/5 + (a[6].v*64)/5 + (a[7].v*128)/5;
-        a[1].i = 0;
-        a[2].i = 0;
-        a[3].i = 0;
-        a[4].i = 0;
-        a[5].i = 0;
-        a[6].i = 0;
-        a[7].i = 0;
-        a[8].i = 0;
-      end if;
+      y = temp1;
+      for i in 1:bits loop
+        a[i].i = 0;
+      end for;
     end BinearZuDezimal;
   end LogicDevice;
 
   // Calculator Modell
-  model Calculator
+model Calculator
+
+  parameter Integer a = 2;                                  // Eingabe des ersten Wertes (falls Subtraktion -> der größere Wert)
+  parameter Integer b = 1;                                  // Eingabe des zweiten Wertes (falls Subtraktion -> nicht negativ angeben)
+  parameter Operation operation = Operation.Addition;    // Eingabe der geünschten mathematischen Operation (+, -, *)
   
-    parameter Integer a = 2;                                  // Eingabe des ersten Wertes (falls Subtraktion -> der größere Wert)
-    parameter Integer b = 1;                                  // Eingabe des zweiten Wertes (falls Subtraktion -> nicht negativ angeben)
-    parameter Operation operation = Operation.Addition;    // Eingabe der geünschten mathematischen Operation (+, -, *)
-    
-    
-    
-    parameter Integer bits = 5;                               // Eingabe der benötigten Bits (Default ist 4 -> erstmal so lassen)
-    
-  // Ein addierer-Modell, zwei dezimalZuBinaer-Modelle, ein binearZuDezimal-Modell, ein zweierkomplement-Modell und ein multiplikator-Modell werden eingefügt
-  // Dazu kommt ein Pin zum auslesen des Ergebnisses sowie ein ground und eine constantVoltage
-    SimpleMath.Addierer addierer(bits=bits) annotation(
-      Placement(visible = true, transformation(origin = {-44, 2}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  parameter Integer bits = 4;                               // Eingabe der benötigten Bits (Default ist 4 -> erstmal so lassen)
   
-    LogicDevice.DezimalZuBinaer dezimalZuBinaer1(a=a, bits=bits) annotation(
-      Placement(visible = true, transformation(origin = {50, -12}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-    LogicDevice.DezimalZuBinaer dezimalZuBinaer2(a=b, bits=bits) annotation(
-      Placement(visible = true, transformation(origin = {6, -64}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-    Modelica.Electrical.Analog.Basic.Ground ground annotation(
-      Placement(visible = true, transformation(origin = {26, 16}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-    LogicDevice.BinearZuDezimal binearZuDezimal(bits = bits);
-    SimpleMath.Zweierkomplement zweierkomplement annotation(
-      Placement(visible = true, transformation(origin = {-54, 62}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-    Modelica.Electrical.Analog.Sources.ConstantVoltage constantVoltage(V = 5)  annotation(
-      Placement(visible = true, transformation(origin = {26, 56}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
-    SimpleMath.Multiplikator multiplikator(factor=b, bits=bits) annotation(
-      Placement(visible = true, transformation(origin = {-42, -60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-    Modelica.Electrical.Analog.Interfaces.Pin result;
-  equation
-  // benötigte "grounds" und "vccs" werden verbunden
-      connect(zweierkomplement.vcc, constantVoltage.p);
-      connect(zweierkomplement.ground, ground.p);
-      connect(multiplikator.ground, ground.p);
+// Ein addierer-Modell, zwei dezimalZuBinaer-Modelle, ein binearZuDezimal-Modell, ein zweierkomplement-Modell und ein multiplikator-Modell werden eingefügt
+// Dazu kommt ein Pin zum auslesen des Ergebnisses sowie ein ground und eine constantVoltage
+  SimpleMath.Addierer addierer(bits=bits) annotation(
+    Placement(visible = true, transformation(origin = {-44, 2}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+
+  LogicDevice.DezimalZuBinaer dezimalZuBinaer1(a=a, bits=bits) annotation(
+    Placement(visible = true, transformation(origin = {50, -12}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  LogicDevice.DezimalZuBinaer dezimalZuBinaer2(a=b, bits=bits) annotation(
+    Placement(visible = true, transformation(origin = {6, -64}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Electrical.Analog.Basic.Ground ground annotation(
+    Placement(visible = true, transformation(origin = {26, 16}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  LogicDevice.BinearZuDezimal binearZuDezimal(bits = bits);
+  SimpleMath.Zweierkomplement zweierkomplement annotation(
+    Placement(visible = true, transformation(origin = {-54, 62}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Modelica.Electrical.Analog.Sources.ConstantVoltage constantVoltage(V = 5)  annotation(
+    Placement(visible = true, transformation(origin = {26, 56}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
+  SimpleMath.Multiplikator multiplikator(factor=b, bits=bits) annotation(
+    Placement(visible = true, transformation(origin = {-42, -60}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  output Integer result;
+equation
+// benötigte "grounds" und "vccs" werden verbunden
+    connect(zweierkomplement.vcc, constantVoltage.p);
+    connect(zweierkomplement.ground, ground.p);
+    connect(multiplikator.ground, ground.p);
+    
+    result = binearZuDezimal.y;
+
+// Verbindungen für die Additions-Operation
+  if operation == Operation.Addition then
+    connect(dezimalZuBinaer1.y, addierer.a);
+    connect(dezimalZuBinaer2.y, addierer.b);
+    connect(binearZuDezimal.a, addierer.y);
+    
+    for i in 1:bits loop
+      connect(multiplikator.a[i], ground.p);
+      connect(zweierkomplement.a[i], ground.p);
+    end for;
+
+    connect(addierer.y, binearZuDezimal.a);
+// Verbindungen für die Subtraktions-Operation
+  elseif operation == Operation.Subtraktion then
+    connect(dezimalZuBinaer1.y, addierer.a);
+    connect(dezimalZuBinaer2.y, zweierkomplement.a);
+    connect(addierer.b, zweierkomplement.y);
+    connect(binearZuDezimal.a, addierer.y);
+    
+    for i in 1:bits loop
+      connect(multiplikator.a[i], ground.p);
+    end for;
+// Verbindungen für die Multiplikations-Operation
+  else
+    connect(multiplikator.a, dezimalZuBinaer1.y);
+    connect(binearZuDezimal.a, multiplikator.y);
+    
+    for i in 1:bits loop
+      connect(zweierkomplement.a[i], ground.p);
+      connect(addierer.a[i], ground.p);
+      connect(addierer.b[i], ground.p);
+    end for;
+    connect(multiplikator.y, binearZuDezimal.a);
+  end if;
   
-  // Verbindungen für die Additions-Operation
-    if operation == Operation.Addition then
-      connect(dezimalZuBinaer1.y, addierer.a);
-      connect(dezimalZuBinaer2.y, addierer.b);
-      connect(binearZuDezimal.a, addierer.y);
-      connect(binearZuDezimal.y, result);
-      for i in 1:bits loop
-        connect(multiplikator.a[i], ground.p);
-        connect(zweierkomplement.a[i], ground.p);
-      end for;
-  // Verbindungen für die Subtraktions-Operation
-    elseif operation == Operation.Subtraktion then
-      connect(dezimalZuBinaer1.y, addierer.a);
-      connect(dezimalZuBinaer2.y, zweierkomplement.a);
-      connect(addierer.b, zweierkomplement.y);
-      connect(binearZuDezimal.a, addierer.y);
-      connect(binearZuDezimal.y, result);
-      for i in 1:bits loop
-        connect(multiplikator.a[i], ground.p);
-      end for;
-  // Verbindungen für die Multiplikations-Operation
-    else
-      connect(multiplikator.a, dezimalZuBinaer1.y);
-      connect(binearZuDezimal.a, multiplikator.y);
-      connect(binearZuDezimal.y, result);
-      for i in 1:bits loop
-        connect(zweierkomplement.a[i], ground.p);
-        connect(addierer.a[i], ground.p);
-        connect(addierer.b[i], ground.p);
-      end for;
-    end if;
-    connect(constantVoltage.n, ground.p) annotation(
-      Line(points = {{26, 46}, {36, 46}, {36, 16}, {34, 16}}, color = {0, 0, 255}));
-  end Calculator;
+  connect(constantVoltage.n, ground.p) annotation(
+    Line(points = {{26, 46}, {36, 46}, {36, 16}, {34, 16}}, color = {0, 0, 255}));
+end Calculator;
 
   // Enumeration von den Rechenoptionen
   type Operation = enumeration(Addition, Subtraktion, Multiplikation);
