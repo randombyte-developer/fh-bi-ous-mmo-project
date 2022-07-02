@@ -410,14 +410,11 @@ package Projekt
   // Calculator Modell
 
   model Calculator
-    parameter Integer a = 2;
-    // Eingabe des ersten Wertes (falls Subtraktion -> der größere Wert)
-    parameter Integer b = 4;
-    // Eingabe des zweiten Wertes (falls Subtraktion -> nicht negativ angeben)
-    parameter Operation operation = Operation.Multiplikation;
-    // Eingabe der geünschten mathematischen Operation (+, -, *)
-    parameter Integer bits = 8;
-    // Eingabe der benötigten Bits
+    parameter Integer a = 2; // Eingabe des ersten Wertes (falls Subtraktion -> der größere Wert)
+    parameter Integer b = 4; // Eingabe des zweiten Wertes (falls Subtraktion -> nicht negativ angeben)
+    parameter Operation operation = Operation.Multiplikation; // Eingabe der geünschten mathematischen Operation (+, -, *)
+    parameter Integer bits = 8; // Eingabe der benötigten Bits
+    
     // Ein addierer-Modell, zwei dezimalZuBinaer-Modelle, ein binearZuDezimal-Modell, ein zweierkomplement-Modell und ein multiplikator-Modell werden eingefügt
     // Dazu kommt ein Pin zum Auslesen des Ergebnisses sowie ein ground und eine constantVoltage
     Modelica.Electrical.Analog.Sources.ConstantVoltage constantVoltage(V = 5);
