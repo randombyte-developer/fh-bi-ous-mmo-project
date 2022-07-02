@@ -1,7 +1,7 @@
 package Projekt
   package LogicGates
     model NAND
-      constant Boolean useTransistors = false;
+      constant Boolean useTransistors = true;
       // Elektrische Gatter, Ein- und Ausgangspins, sowie Constant-Source und Ground werden hinzugefuegt
       Modelica.Electrical.Analog.Interfaces.Pin a annotation(
         Placement(visible = true, transformation(origin = {-74, 84}, extent = {{-10, -10}, {10, 10}}, rotation = 0), iconTransformation(origin = {-78, 80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -410,10 +410,10 @@ package Projekt
   // Calculator Modell
 
   model Calculator
-    parameter Integer a = 2; // Eingabe des ersten Wertes (falls Subtraktion -> der größere Wert)
-    parameter Integer b = 4; // Eingabe des zweiten Wertes (falls Subtraktion -> nicht negativ angeben)
-    parameter Operation operation = Operation.Multiplikation; // Eingabe der geünschten mathematischen Operation (+, -, *)
-    parameter Integer bits = 8; // Eingabe der benötigten Bits
+    parameter Integer a = 2; // Eingabe des ersten Wertes (falls Subtraktion -> der größere Wert, falls Multiplikation/Addition mit 0 -> 0 eintragen)
+    parameter Integer b = 1; // Eingabe des zweiten Wertes (falls Subtraktion -> nicht negativ angeben)
+    parameter Operation operation = Operation.Addition; // Eingabe der geünschten mathematischen Operation (+, -, *)
+    parameter Integer bits = 2; // Eingabe der benötigten Bits
     
     // Ein addierer-Modell, zwei dezimalZuBinaer-Modelle, ein binearZuDezimal-Modell, ein zweierkomplement-Modell und ein multiplikator-Modell werden eingefügt
     // Dazu kommt ein Pin zum Auslesen des Ergebnisses sowie ein ground und eine constantVoltage
